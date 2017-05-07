@@ -12,9 +12,9 @@ function Geom:initialize(nX, nY)
     self.nX = nX or 0
     self.nY = nY or 0
     self.a = P.puzzleA
-    self.left = (love.graphics.getWidth() - (nX - 1) * self.a)/2
+    self.left = (love.graphics.getWidth() - (self.nX - 1) * self.a)/2
     self.right = love.graphics.getWidth() - self.left
-    self.top = (love.graphics.getHeight() - (nY - 1) * self.a)/2
+    self.top = (love.graphics.getHeight() - (self.nY - 1) * self.a)/2
     self.bottom = love.graphics.getHeight() - self.top
     self.width = self.right - self.left
     self.height = self.bottom - self.top
@@ -32,24 +32,24 @@ function Puzzle:initialize(nX, nY)
     self.geom = Geom:new(nX, nY)
 
     -- create dots
-    self.dots = Pool()
+    self.dots = Pool:new()
     for i = 1, nX do for j = 1, nY do
         self.dots:add(Dot:new(i, j, self.geom:dotPos(i, j)))
     end end
 
     -- create arrow controllers
-    self.arrows = Pool()
-    for i = 1, nX do
-        self.arrows:add(Arrow.top(i, 1, self.geom, self.dots))
-        self.arrows:add(Arrow.bottom(i, nY, self.geom, self.dots))
-    end
-    for j = 1, nY do
-        self.arrows:add(Arrow.right(nX, j, self.geom, self.dots))
-        self.arrows:add(Arrow.left(1, j, self.geom, self.dots))
-    end
+    self.arrows = Pool:new()
+    -- for i = 1, nX do
+    --     self.arrows:add(Arrow.top(i, 1, self.geom, self.dots))
+    --     self.arrows:add(Arrow.bottom(i, nY, self.geom, self.dots))
+    -- end
+    -- for j = 1, nY do
+    --     self.arrows:add(Arrow.right(nX, j, self.geom, self.dots))
+    --     self.arrows:add(Arrow.left(1, j, self.geom, self.dots))
+    -- end
 
     -- create shapes
-    self.shapes = Pool()
+    self.shapes = Pool:new()
 end
 
 
@@ -66,7 +66,7 @@ end
 
 function Puzzle:update(dt)
     self.dots:update(dt)
-    self.arrows:update(dt)
+    -- self.arrows:update(dt)
     if self.moving then
         local anyMoving = false
         for _, dot in ipairs(self.dots) do
@@ -80,7 +80,7 @@ end
 function Puzzle:draw()
     love.graphics.setLineJoin('bevel')
     self.dots:draw()
-    self.arrows:draw()
+    -- self.arrows:draw()
     self.shapes:draw()
     -- enclosing rectangle
     love.graphics.setColor(P.puzzleLineColor)

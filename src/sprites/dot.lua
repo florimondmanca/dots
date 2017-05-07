@@ -35,6 +35,7 @@ function Dot:initialize(i, j, x, y)
     self.j = j or 1
     self.x = x or 0
     self.y = y or 0
+    print('New dot at', self.i, self.j, self.x, self.y)
     self.animator = nil
 end
 
