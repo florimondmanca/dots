@@ -21,7 +21,7 @@ function Geom:initialize(nX, nY)
 end
 
 function Geom:dotX(i) return self.left + (i-1) * self.a end
-function Geom:dotY(j) return self.right + (j-1) * self.a end
+function Geom:dotY(j) return self.top + (j-1) * self.a end
 function Geom:dotPos(i, j) return self:dotX(i), self:dotY(j) end
 
 
@@ -33,20 +33,20 @@ function Puzzle:initialize(nX, nY)
 
     -- create dots
     self.dots = Pool:new()
-    for i = 1, nX do for j = 1, nY do
+    for i = 1, self.geom.nX do for j = 1, self.geom.nY do
         self.dots:add(Dot:new(i, j, self.geom:dotPos(i, j)))
     end end
 
     -- create arrow controllers
     self.arrows = Pool:new()
-    -- for i = 1, nX do
-    --     self.arrows:add(Arrow.top(i, 1, self.geom, self.dots))
-    --     self.arrows:add(Arrow.bottom(i, nY, self.geom, self.dots))
-    -- end
-    -- for j = 1, nY do
-    --     self.arrows:add(Arrow.right(nX, j, self.geom, self.dots))
-    --     self.arrows:add(Arrow.left(1, j, self.geom, self.dots))
-    -- end
+    for i = 1, nX do
+        self.arrows:add(Arrow.top(i, 1, self.geom, self.dots))
+        self.arrows:add(Arrow.bottom(i, nY, self.geom, self.dots))
+    end
+    for j = 1, nY do
+        self.arrows:add(Arrow.right(nX, j, self.geom, self.dots))
+        self.arrows:add(Arrow.left(1, j, self.geom, self.dots))
+    end
 
     -- create shapes
     self.shapes = Pool:new()
@@ -58,18 +58,12 @@ function Puzzle:findDot(i, j)
 end
 
 
-function Puzzle:setShapes(mobile, fixed)
-    self.shapes.mobile = mobile
-    self.shapes.fixed = fixed
-end
-
-
 function Puzzle:update(dt)
     self.dots:update(dt)
     -- self.arrows:update(dt)
     if self.moving then
         local anyMoving = false
-        for _, dot in ipairs(self.dots) do
+        for dot in self.dots:iter() do
             if dot:isMoving() then anyMoving = true end
         end
         if not anyMoving then self.moving = false end
@@ -80,7 +74,7 @@ end
 function Puzzle:draw()
     love.graphics.setLineJoin('bevel')
     self.dots:draw()
-    -- self.arrows:draw()
+    self.arrows:draw()
     self.shapes:draw()
     -- enclosing rectangle
     love.graphics.setColor(P.puzzleLineColor)
@@ -95,19 +89,19 @@ end
 
 
 function Puzzle:isFinished()
-    return self.shapes.mobile:sameAs(self.shapes.fixed)
+    return self.shapes:get('mobile') == self.shapes:get('fixed')
 end
 
 
 function Puzzle:mousemoved(x, y, _, _)
-    for _, arrow in ipairs(self.arrows) do
-        arrow:hover(x, y)
+    for arrow in self.arrows:iter() do
+        arrow:mousemoved(x, y)
     end
 end
 
 function Puzzle:mousepressed(x, y, button)
     if button == 1 then
-        for _, arrow in ipairs(self.arrows) do
+        for arrow in self.arrows:iter() do
             arrow:mousepressed(x, y, button)
         end
     end
@@ -131,7 +125,8 @@ function Puzzle.fromlevel(levelname)
     end
     local mobile = Rectangle:new(unpack(mobileDots))
     local fixed = Rectangle.fixed(unpack(fixedDots))
-    puzzle:setShapes(mobile, fixed)
+    puzzle.shapes:add(fixed, 'fixed')
+    puzzle.shapes:add(mobile, 'mobile')
 
     return puzzle
 end

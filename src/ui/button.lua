@@ -7,7 +7,7 @@ function Button:initialize(x, y, width, height, onClick)
     self.y = y or 0
     self.width = width or 0
     self.height = height or 0
-    self.onClick = onClick or function(x, y) end
+    self.onClick = onClick or function() end
     self.hovering = false
     return self
 end

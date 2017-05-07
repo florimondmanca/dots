@@ -13,10 +13,10 @@ end
 
 function love.update(dt)
     puzzle:update(dt)
-    -- if puzzle:isFinished() then
-    --     level = level + 1
-    --     puzzle = Puzzle.fromlevel(level)
-    -- end
+    if puzzle:isFinished() then
+        level = level + 1
+        puzzle = Puzzle.fromlevel(level)
+    end
 end
 
 function love.draw()

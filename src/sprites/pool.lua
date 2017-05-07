@@ -30,4 +30,17 @@ function Pool:find(callback)
     return nil
 end
 
+function Pool:get(k)
+    return self.objects[k]
+end
+
+function Pool:iter()
+    local i = 0
+    return function()
+        if i == #self.objects then return nil end
+        i = i + 1
+        return self.objects[i]
+    end
+end
+
 return Pool

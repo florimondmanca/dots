@@ -24,13 +24,13 @@ function Rectangle:draw()
 end
 
 function Rectangle:__eq(other)
+    print('checking equality')
     local eq = true
-    local otherAnchors = other:anchors()
     for i = 1, 4 do
         local a = self.anchors[i]
         local exists = false
         for j = 1, 4 do
-            local oa = otherAnchors[j]
+            local oa = other.anchors[j]
             if a.i == oa.i and a.j == oa.j then exists = true end
         end
         if not exists then eq = false end
@@ -49,8 +49,8 @@ end
 
 function Rectangle.fixed(dot1, dot2, dot3, dot4)
     local rectangle = Rectangle:new(dot1, dot2, dot3, dot4)
-    rectangle.color[1] = rectangle.color[1] - 50
-    rectangle.color[2] = rectangle.color[2] - 50
+    local color = {rectangle.color[1] - 50, rectangle.color[2] - 50, rectangle.color[3], rectangle.color[4]}
+    rectangle.color = color
     -- replace the anchors by fixed tables
     local fixedAnchors = {}
     for _, dot in ipairs(rectangle.anchors) do

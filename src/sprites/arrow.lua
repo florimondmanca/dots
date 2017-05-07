@@ -20,7 +20,8 @@ local function getPoints(x, y, side)
     local xlist = {}
     local ylist = {}
     local points = {}
-    for _, point in ipairs{{0, 0}, {3*P.arrowSize/4, 0}, {0, 2*P.arrowSize}} do
+    local b = P.arrowSize
+    for _, point in ipairs{{-b/4, b}, {b/2, 0}, {-b/4, -b}} do
         local xp, yp = rot(point[1], point[2], x, y)
         table.insert(xlist, xp)
         table.insert(ylist, yp)
@@ -40,10 +41,10 @@ function Arrow:initialize(i, j, side, geom, onClick)
     self.side = side or 'top'
     local x, y = geom:dotPos(i, j)
     local xlist, ylist, points = getPoints(x, y, self.side)
-    Button.initialize(self,
-        math.min(unpack(xlist)), math.max(unpack(ylist)),
-        math.max(unpack(xlist)) - x, math.max(unpack(ylist)) - y, onClick
-    )
+    x, y = math.min(unpack(xlist)), math.min(unpack(ylist))
+    local width = math.max(unpack(xlist)) - x
+    local height = math.max(unpack(ylist)) - y
+    Button.initialize(self,x, y, width, height, onClick)
     self.points = points
     return self
 end
@@ -52,7 +53,7 @@ function Arrow:update(_) end
 
 function Arrow:draw()
     local c = P.puzzleLineColor
-    if self.clicked or self.hovering then
+    if self.hovering then
         c = {c[1] - 20, c[2] - 20, c[3] - 20, c[4]}
     end
     love.graphics.setColor(c)
@@ -61,9 +62,9 @@ function Arrow:draw()
 end
 
 function Arrow.top(i, j, geom, dots)
-    local arrow = Arrow:new(i, j, 'top', geom)
+    local arrow = Arrow:new(i, j - 1, 'top', geom)
     local onClick = function()
-        for _, dot in ipairs(dots) do
+        for dot in dots:iter() do
             if dot.i == arrow.i then
                 dot.j = 1 + (dot.j - 1 - 1) % geom.nY
                 dot:startAnim(geom:dotPos(dot.i, dot.j))
@@ -75,9 +76,9 @@ function Arrow.top(i, j, geom, dots)
 end
 
 function Arrow.bottom(i, j, geom, dots)
-    local arrow = Arrow:new(i, j, 'bottom', geom)
+    local arrow = Arrow:new(i, j + 1, 'bottom', geom)
     local onClick = function()
-        for _, dot in ipairs(dots) do
+        for dot in dots:iter() do
             if dot.i == arrow.i then
                 dot.j = 1 + (dot.j + 1 - 1) % geom.nY
                 dot:startAnim(geom:dotPos(dot.i, dot.j))
@@ -90,9 +91,9 @@ end
 
 
 function Arrow.right(i, j, geom, dots)
-    local arrow = Arrow:new(i, j, 'right', geom)
+    local arrow = Arrow:new(i + 1, j, 'right', geom)
     local onClick = function()
-        for _, dot in ipairs(dots) do
+        for dot in dots:iter() do
             if dot.j == arrow.j then
                 dot.i = 1 + (dot.i + 1 - 1) % geom.nX
                 dot:startAnim(geom:dotPos(dot.i, dot.j))
@@ -104,9 +105,9 @@ function Arrow.right(i, j, geom, dots)
 end
 
 function Arrow.left(i, j, geom, dots)
-    local arrow = Arrow:new(i, j, 'left', geom)
+    local arrow = Arrow:new(i - 1, j, 'left', geom)
     local onClick = function()
-        for _, dot in ipairs(dots) do
+        for dot in dots:iter() do
             if dot.j == arrow.j then
                 dot.i = 1 + (dot.i - 1 - 1) % geom.nX
                 dot:startAnim(geom:dotPos(dot.i, dot.j))
