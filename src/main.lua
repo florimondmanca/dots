@@ -3,7 +3,7 @@ local Puzzle = require('puzzle')
 math.randomseed(os.time())
 
 local puzzle
-local buttons = {}
+-- local buttons = {}
 local level = 1
 
 function love.load()

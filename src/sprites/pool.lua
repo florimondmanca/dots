@@ -1,26 +1,33 @@
-local function Pool()
-    local pool = {}
-    function pool:add(object, key)
-        table.insert(pool, object)
-        if key then pool[key] = object end
+local class = require('utils.class')
+
+local Pool = class('Pool')
+
+function Pool:initialize()
+    self.objects = {}
+end
+
+function Pool:add(object, key)
+    table.insert(self.objects, object)
+    if key then self.objects[key] = object end
+end
+
+function Pool:update(dt)
+    for _, object in ipairs(self.objects) do
+        object:update(dt)
     end
-    function pool:update(dt)
-        for _, object in ipairs(pool) do
-            object:update(dt)
-        end
+end
+
+function Pool:draw()
+    for _, object in ipairs(self.objects) do
+        object:draw()
     end
-    function pool:draw()
-        for _, object in ipairs(pool) do
-            object:draw()
-        end
+end
+
+function Pool:find(callback)
+    for _, object in ipairs(self.objects) do
+        if callback(object) then return object end
     end
-    function pool:find(callback)
-        for _, object in ipairs(pool) do
-            if callback(object) then return object end
-        end
-        return nil
-    end
-    return pool
+    return nil
 end
 
 return Pool

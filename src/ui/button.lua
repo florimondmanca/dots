@@ -1,14 +1,13 @@
 local class = require('utils.class')
 
-local Button = class()
+local Button = class('Button')
 
-function Button.new(text, x, y, width, height, onClick)
-    local self = setmetatable({}, Button)
-    self.text = text
-    self.x, self.y = x, y
-    self.width = width
-    self.height = height
-    self.onClick = onClick
+function Button:initialize(x, y, width, height, onClick)
+    self.x = x or 0
+    self.y = y or 0
+    self.width = width or 0
+    self.height = height or 0
+    self.onClick = onClick or function(x, y) end
     self.hovering = false
     return self
 end
@@ -26,7 +25,9 @@ function Button:mousemoved(x, y)
 end
 
 function Button:mousepressed(x, y, button)
-    if button == 1 and self.onClick then
+    if button == 1 and self.onClick and self.hovering then
         self.onClick(x, y)
     end
 end
+
+return Button
