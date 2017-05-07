@@ -24,7 +24,6 @@ function Rectangle:draw()
 end
 
 function Rectangle:__eq(other)
-    print('checking equality')
     local eq = true
     for i = 1, 4 do
         local a = self.anchors[i]
