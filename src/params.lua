@@ -26,9 +26,8 @@ P.rectangleColor = makeColor('#ff8822')
 P.rectangleDotRadius= 4 -- px
 
 P.font = love.graphics.newFont('res/fonts/hellovetica.ttf')
-P.fontColor = makeColor('#000000')
-P.textColor = makeColor('#000000')
+P.fontColor = makeColor('#bbbfbf')
 
-P.defaultButtonColor = makeColor('#ff8822')
+P.defaultButtonColor = makeColor('#ffffff')
 
 return P

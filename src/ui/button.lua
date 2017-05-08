@@ -60,7 +60,7 @@ function TextButton:initialize(text, x, y, width, height, onClick)
     TextButton.super.initialize(self, x, y, width, height, onClick)
     self.wrapWidth = true
     self.wrapHeight = true
-    self.textColor = P.textColor
+    self.textColor = P.fontColor
     self.textStr = text
     self.text = love.graphics.newText(P.font, self.textStr)
 end
@@ -69,14 +69,20 @@ function TextButton:setWidth(value)
     if type(value) == 'string' then
         if value == 'wrap_content' then self.wrapWidth = true
         else return end
-    else self.width = value end
+    else
+        self.wrapWidth = false
+        self.width = value
+    end
 end
 
 function TextButton:setHeight(value)
     if type(value) == 'string' then
         if value == 'wrap_content' then self.wrapHeight = true
         else return end
-    else self.height = value end
+    else
+        self.wrapHeight = false
+        self.height = value
+    end
 end
 
 function TextButton:getWidth()
@@ -101,16 +107,19 @@ function TextButton:getPadX() return self.padX or 0 end
 function TextButton:getPadY() return self.padY or 0 end
 
 function TextButton:getTextColor()
-    local c = self.textColor
     if self.hovering then
-        c = {
+        local c = self.textColor
+        return {
             c[1] + (c[1] < 128 and 50 or -50),
             c[2] + (c[2] < 128 and 50 or -50),
             c[3] + (c[3] < 128 and 50 or -50),
             c[4]
         }
-    end
-    return c
+    else return self.textColor end
+end
+
+function TextButton:setTextColor(color)
+    self.textColor = color
 end
 
 function TextButton:addBorder(width, color)

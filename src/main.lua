@@ -1,20 +1,32 @@
 local P = require('params')
 local Puzzle = require('puzzle')
-local Pool = require('sprites.pool')
 local B = require('ui.button')
+local C = require('ui.containers')
 math.randomseed(os.time())
 
 local puzzle
-local buttons = Pool()
+local buttons = C.LinearLayout()
+buttons:setOrientation('horizontal')
+buttons:setPadding(10)
 local level = 1
 
 function love.load()
 	love.graphics.setBackgroundColor(P.backgroundColor)
     puzzle = Puzzle.fromlevel(level)
-    local b = B.TextButton('Quit', 30, 30)
-    b:setBackgroundColor('none')
-    b:setOnClick(function() love.event.quit() end)
-    buttons:add(b)
+    -- load buttons
+    local x, y = 30, love.graphics.getHeight() - 60
+    local foo = B.TextButton('Menu', x, y)
+    foo:setOnClick(function() print('Foo! Foo! Foo! ...') end)
+    foo:setPadding(5)
+    local quit = B.TextButton('Quit', x, y)
+    quit:setOnClick(function() love.event.quit() end)
+    quit:setPadding(5)
+    buttons:add(foo)
+    buttons:add(quit)
+    for b in buttons:iter() do
+        b:setBackgroundColor('none')
+        b:addBorder(2)
+    end
 end
 
 function love.update(dt)

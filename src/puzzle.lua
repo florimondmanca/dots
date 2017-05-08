@@ -3,7 +3,7 @@ local P = require('params')
 local Dot = require('sprites.dot')
 local Arrow = require('sprites.arrow')
 local Rectangle = require('sprites.rectangle')
-local Pool = require('sprites.pool')
+local Pool = require('utils.pool')
 
 
 local Geom = class('Geom')
