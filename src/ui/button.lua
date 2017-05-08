@@ -2,15 +2,19 @@ local class = require('utils.class')
 
 local Button = class('Button')
 
-function Button:initialize(x, y, width, height, onClick)
+function Button:initialize(x, y, width, height, onClick, options)
     self.x = x or 0
     self.y = y or 0
     self.width = width or 0
     self.height = height or 0
     self.onClick = onClick or function() end
     self.hovering = false
+    options = options or {}
+    self.color = options.color or {0, 0, 0, 255}
     return self
 end
+
+function Button:draw() end
 
 function Button:setOnClick(callback)
     self.onClick = callback

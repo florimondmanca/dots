@@ -35,7 +35,7 @@ end
 
 local Arrow = class('Arrow', Button)
 
-function Arrow:initialize(i, j, side, geom, onClick)
+function Arrow:initialize(i, j, side, geom, onClick, options)
     self.i = i or 1
     self.j = j or 1
     self.side = side or 'top'
@@ -44,19 +44,25 @@ function Arrow:initialize(i, j, side, geom, onClick)
     x, y = math.min(unpack(xlist)), math.min(unpack(ylist))
     local width = math.max(unpack(xlist)) - x
     local height = math.max(unpack(ylist)) - y
-    Button.initialize(self,x, y, width, height, onClick)
+    options = options or {}
+    options.color = P.puzzleLineColor
+    Button.initialize(self,x, y, width, height, onClick, options)
     self.points = points
     return self
 end
 
 function Arrow:update(_) end
 
-function Arrow:draw()
-    local c = P.puzzleLineColor
+function Arrow:getColor()
+    local c = self.color
     if self.hovering then
         c = {c[1] - 20, c[2] - 20, c[3] - 20, c[4]}
     end
-    love.graphics.setColor(c)
+    return c
+end
+
+function Arrow:draw()
+    love.graphics.setColor(self:getColor())
     love.graphics.setLineWidth(P.arrowLineWidth)
     love.graphics.line(self.points)
 end
