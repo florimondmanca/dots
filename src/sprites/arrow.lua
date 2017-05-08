@@ -43,7 +43,7 @@ function Arrow:initialize(i, j, side, geom, onClick)
     x, y = math.min(unpack(xlist)), math.min(unpack(ylist))
     local width = math.max(unpack(xlist)) - x
     local height = math.max(unpack(ylist)) - y
-    Arrow.super:initialize(x, y, width, height, onClick)
+    Arrow.super.initialize(self, x, y, width, height, onClick)
     self:setBackgroundColor(P.puzzleLineColor)
     self.points = points
     return self
@@ -52,7 +52,12 @@ end
 function Arrow:getColor()
     local c = self.color
     if self.hovering then
-        c = {c[1] - 20, c[2] - 20, c[3] - 20, c[4]}
+        c = {
+            c[1] + (c[1] < 128 and 50 or -50),
+            c[2] + (c[2] < 128 and 50 or -50),
+            c[3] + (c[3] < 128 and 50 or -50),
+            c[4]
+        }
     end
     return c
 end
@@ -62,7 +67,6 @@ function Arrow:draw()
     love.graphics.setColor(self:getColor())
     love.graphics.setLineWidth(P.arrowLineWidth)
     love.graphics.line(self.points)
-    love.graphics.rectangle('line', self.x, self.y, self:getWidth(), self:getHeight())
 end
 
 function Arrow.top(i, j, geom, dots)

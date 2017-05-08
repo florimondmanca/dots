@@ -11,9 +11,8 @@ local level = 1
 function love.load()
 	love.graphics.setBackgroundColor(P.backgroundColor)
     puzzle = Puzzle.fromlevel(level)
-    local b = B.TextButton('Hello!', 30, 30)
-    b:setPadding(10)
-    b:addBorder(0.1)
+    local b = B.TextButton('Quit', 30, 30)
+    b:setBackgroundColor('none')
     b:setOnClick(function() love.event.quit() end)
     buttons:add(b)
 end

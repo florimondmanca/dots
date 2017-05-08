@@ -18,7 +18,8 @@ function Button:initialize(x, y, width, height, onClick)
 end
 
 function Button:setBackgroundColor(color)
-    self.color = color or P.defaultButtonColor
+    if color == 'none' then self.color = {0, 0, 0, 0}
+    else self.color = color or P.defaultButtonColor end
 end
 function Button:hide() self.visible = false end
 function Button:show() self.visible = true end
@@ -41,7 +42,6 @@ end
 function Button:mousemoved(x, y)
     if not self.visible then return end
     self.hovering = self:isHovering(x, y)
-    if self.hovering then print('hovering!') end
 end
 
 function Button:mousepressed(x, y, button)
@@ -57,7 +57,7 @@ M.Button = Button
 local TextButton = Button:subclass('TextButton')
 
 function TextButton:initialize(text, x, y, width, height, onClick)
-    Button.initialize(self, x, y, width, height, onClick)
+    TextButton.super.initialize(self, x, y, width, height, onClick)
     self.wrapWidth = true
     self.wrapHeight = true
     self.textColor = P.textColor
@@ -100,11 +100,27 @@ end
 function TextButton:getPadX() return self.padX or 0 end
 function TextButton:getPadY() return self.padY or 0 end
 
+function TextButton:getTextColor()
+    local c = self.textColor
+    if self.hovering then
+        c = {
+            c[1] + (c[1] < 128 and 50 or -50),
+            c[2] + (c[2] < 128 and 50 or -50),
+            c[3] + (c[3] < 128 and 50 or -50),
+            c[4]
+        }
+    end
+    return c
+end
+
 function TextButton:addBorder(width, color)
     width = width or 1
-    color = color or self.textColor
     self.borderWidth = width
     self.borderColor = color
+end
+
+function TextButton:getBorderColor()
+    return self.borderColor or self:getTextColor()
 end
 
 function TextButton:drawBackground()
@@ -113,16 +129,16 @@ function TextButton:drawBackground()
 end
 
 function TextButton:drawBorder()
-    if self.borderWidth and self.borderColor then
-        love.graphics.setLineJoin('miter')
-        love.graphics.setColor(self.borderColor)
+    if self.borderWidth then
+        love.graphics.setLineJoin('bevel')
+        love.graphics.setColor(self:getBorderColor())
         love.graphics.setLineWidth(self.borderWidth)
         love.graphics.rectangle('line', self.x, self.y, self:getWidth(), self:getHeight())
     end
 end
 
 function TextButton:drawText()
-    love.graphics.setColor(self.textColor)
+    love.graphics.setColor(self:getTextColor())
     love.graphics.draw(self.text,
         self.x + self:getWidth()/2 - self.text:getWidth()/2,
         self.y + self:getHeight()/2 - self.text:getHeight()/2
