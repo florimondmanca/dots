@@ -4,14 +4,17 @@ local B = require('ui.button')
 local C = require('ui.containers')
 math.randomseed(os.time())
 
+local level
 local puzzle
+
 local buttons = C.LinearLayout()
 buttons:setOrientation('horizontal')
 buttons:setPadding(10)
-local level = 1
+
 
 function love.load()
 	love.graphics.setBackgroundColor(P.backgroundColor)
+    level = 1
     puzzle = Puzzle.fromlevel(level)
     -- load buttons
     local x, y = 30, love.graphics.getHeight() - 60
@@ -30,15 +33,15 @@ function love.load()
 end
 
 local function nextLevel()
-    level = level + 1
-    puzzle = Puzzle.fromlevel(level)
+    print('Finished!')
+    -- level = level + 1
+    -- puzzle = Puzzle.fromlevel(level)
 end
 
 function love.update(dt)
     puzzle:update(dt)
     if puzzle:isFinished() then
-        -- nextLevel()
-        print('Finished!')
+        nextLevel()
     end
     buttons:update(dt)
 end
