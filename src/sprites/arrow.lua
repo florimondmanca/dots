@@ -1,6 +1,5 @@
-local class = require('utils.class')
 local P = require('params')
-local Button = require('ui.button')
+local buttons = require('ui.button')
 
 -- Utility functions
 
@@ -33,9 +32,9 @@ end
 
 --
 
-local Arrow = class('Arrow', Button)
+local Arrow = buttons.Button:subclass('Arrow')
 
-function Arrow:initialize(i, j, side, geom, onClick, options)
+function Arrow:initialize(i, j, side, geom, onClick)
     self.i = i or 1
     self.j = j or 1
     self.side = side or 'top'
@@ -44,14 +43,11 @@ function Arrow:initialize(i, j, side, geom, onClick, options)
     x, y = math.min(unpack(xlist)), math.min(unpack(ylist))
     local width = math.max(unpack(xlist)) - x
     local height = math.max(unpack(ylist)) - y
-    options = options or {}
-    options.color = P.puzzleLineColor
-    Button.initialize(self,x, y, width, height, onClick, options)
+    Arrow.super:initialize(x, y, width, height, onClick)
+    self:setBackgroundColor(P.puzzleLineColor)
     self.points = points
     return self
 end
-
-function Arrow:update(_) end
 
 function Arrow:getColor()
     local c = self.color
@@ -62,9 +58,11 @@ function Arrow:getColor()
 end
 
 function Arrow:draw()
+    if not self.visible then return end
     love.graphics.setColor(self:getColor())
     love.graphics.setLineWidth(P.arrowLineWidth)
     love.graphics.line(self.points)
+    love.graphics.rectangle('line', self.x, self.y, self:getWidth(), self:getHeight())
 end
 
 function Arrow.top(i, j, geom, dots)
