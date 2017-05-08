@@ -1,4 +1,5 @@
 local Puzzle = require('puzzle')
+local Menu = require('menu')
 math.randomseed(os.time())
 
 local level
@@ -7,7 +8,8 @@ local state
 
 function love.load()
     level = 1
-    state = Puzzle.fromlevel(level)
+    -- state = Puzzle.fromlevel(level)
+    state = Menu()
     state:load()
 end
 

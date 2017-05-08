@@ -11,17 +11,19 @@ function LinearLayout:initialize()
     self.orientation = VERTICAL
 end
 
-function LinearLayout:add(object, key)
+function LinearLayout:add(...)
     local last = self.objects[#self.objects]
-    LinearLayout.super.add(self, object, key)
-    local dx, dy = 0, 0
-    if last then  -- add padding
-        dx, dy = self:getDisp(last)
-        dx = dx + self:getPadX()
-        dy = dy + self:getPadY()
+    for _, object in ipairs({...}) do
+        LinearLayout.super.add(self, object)
+        local dx, dy = 0, 0
+        if last then  -- add padding
+            dx, dy = self:getDisp(last)
+            dx = dx + self:getPadX()
+            dy = dy + self:getPadY()
+        end
+        object.x = object.x + dx
+        object.y = object.y + dy
     end
-    object.x = object.x + dx
-    object.y = object.y + dy
 end
 
 function LinearLayout:setOrientation(orientation)

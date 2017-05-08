@@ -26,4 +26,8 @@ function GameState:mousepressed(x, y, button)
     self.clickable:mousepressed(x, y, button)
 end
 
+function GameState:isFinished()
+    return false
+end
+
 return GameState

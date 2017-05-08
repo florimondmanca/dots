@@ -8,8 +8,7 @@ function Pool:initialize()
 end
 
 function Pool:add(...)
-    local arg = {...}
-    for _, object in ipairs(arg) do
+    for _, object in ipairs({...}) do
         table.insert(self.objects, object)
     end
 end
