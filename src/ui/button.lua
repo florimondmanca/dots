@@ -1,9 +1,9 @@
-local class = require('utils.class')
+local Base = require('utils.base')
 local P = require('params')
 
 local M = {} -- module
 
-local Button = class('Button')
+local Button = Base:subclass('Button')
 
 function Button:initialize(x, y, width, height, onClick)
     self.x = x or 0

@@ -1,7 +1,7 @@
 local P = require('params')
-local class = require('utils.class')
+local Base = require('utils.base')
 
-local Rectangle = class('Rectangle')
+local Rectangle = Base:subclass('Rectangle')
 
 
 function Rectangle:initialize(dot1, dot2, dot3, dot4)

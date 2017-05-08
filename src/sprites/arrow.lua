@@ -69,6 +69,8 @@ function Arrow:draw()
     love.graphics.line(self.points)
 end
 
+--
+
 function Arrow.top(i, j, geom, dots)
     local arrow = Arrow:new(i, j - 1, 'top', geom)
     local onClick = function()

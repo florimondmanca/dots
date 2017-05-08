@@ -31,6 +31,7 @@ function Geom:dotPos(i, j) return self:dotX(i), self:dotY(j) end
 local Puzzle = GameState:subclass('Puzzle')
 
 function Puzzle:initialize(nX, nY)
+    Puzzle.super.initialize(self)
     self.moving = false
     self.geom = Geom:new(nX, nY)
     self.dots = Pool:new()
@@ -39,6 +40,8 @@ function Puzzle:initialize(nX, nY)
     self.buttons = C.LinearLayout()
     self.buttons:setOrientation('horizontal')
     self.buttons:setPadding(10)
+    self.objects:add(self.dots, self.shapes)
+    self.clickable:add(self.buttons, self.arrows)
 end
 
 
@@ -71,15 +74,11 @@ function Puzzle:load()
         self.arrows:add(Arrow.right(self.geom.nX, j, self.geom, self.dots))
         self.arrows:add(Arrow.left(1, j, self.geom, self.dots))
     end
-    -- create shapes
-    self.shapes = Pool:new()
 end
 
 
 function Puzzle:update(dt)
-    self.dots:update(dt)
-    self.buttons:update(dt)
-    -- self.arrows:update(dt)
+    Puzzle.super.update(self, dt)
     if self.moving then
         local anyMoving = false
         for dot in self.dots:iter() do
@@ -91,11 +90,7 @@ end
 
 
 function Puzzle:draw()
-    love.graphics.setLineJoin('bevel')
-    self.dots:draw()
-    self.arrows:draw()
-    self.shapes:draw()
-    self.buttons:draw()
+    Puzzle.super.draw(self)
     -- enclosing rectangle
     love.graphics.setColor(P.puzzleLineColor)
     love.graphics.setLineWidth(P.puzzleLineWidth)
@@ -105,28 +100,6 @@ function Puzzle:draw()
         self.geom.width + self.geom.a, -- width
         self.geom.height + self.geom.a -- height
     )
-end
-
-
-function Puzzle:mousemoved(x, y, _, _)
-    for arrow in self.arrows:iter() do
-        arrow:mousemoved(x, y)
-    end
-    for button in self.buttons:iter() do
-        button:mousemoved(x, y)
-    end
-end
-
-
-function Puzzle:mousepressed(x, y, button)
-    if button == 1 then
-        for arrow in self.arrows:iter() do
-            arrow:mousepressed(x, y, button)
-        end
-        for b in self.buttons:iter() do
-            b:mousepressed(x, y, button)
-        end
-    end
 end
 
 
@@ -159,8 +132,8 @@ function Puzzle.fromlevel(levelname)
     end
     function puzzle:load()
         Puzzle.load(self)
-        self.shapes:add(Rectangle.fixed(getRect('fixed')), 'fixed')
-        self.shapes:add(Rectangle:new(getRect('mobile')), 'mobile')
+        self.shapes:addkey(Rectangle.fixed(getRect('fixed')), 'fixed')
+        self.shapes:addkey(Rectangle:new(getRect('mobile')), 'mobile')
     end
 
     return puzzle

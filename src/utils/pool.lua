@@ -1,14 +1,22 @@
-local class = require('utils.class')
+local Base = require('utils.base')
 
-local Pool = class('Pool')
+
+local Pool = Base:subclass('Pool')
 
 function Pool:initialize()
     self.objects = {}
 end
 
-function Pool:add(object, key)
+function Pool:add(...)
+    local arg = {...}
+    for _, object in ipairs(arg) do
+        table.insert(self.objects, object)
+    end
+end
+
+function Pool:addkey(object, key)
     table.insert(self.objects, object)
-    if key then self.objects[key] = object end
+    self.objects[key] = object
 end
 
 function Pool:update(dt)
@@ -42,5 +50,18 @@ function Pool:iter()
         return self.objects[i]
     end
 end
+
+function Pool:mousemoved(x, y)
+    for _, object in ipairs(self.objects) do
+        object:mousemoved(x, y)
+    end
+end
+
+function Pool:mousepressed(x, y, button)
+    for _, object in ipairs(self.objects) do
+        object:mousepressed(x, y, button)
+    end
+end
+
 
 return Pool

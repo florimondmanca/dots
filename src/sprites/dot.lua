@@ -1,4 +1,5 @@
 local class = require('utils.class')
+local Base = require('utils.base')
 local P = require('params')
 
 local Animator = class('Animator')
@@ -28,7 +29,7 @@ end
 
 --
 
-local Dot = class('Dot')
+local Dot = Base:subclass('Dot')
 
 function Dot:initialize(i, j, x, y)
     self.i = i or 1
