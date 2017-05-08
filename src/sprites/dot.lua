@@ -60,7 +60,8 @@ end
 
 
 function Dot:isMoving()
-    return self.animator ~= nil
+    if self.animator then return self.animator.running
+    else return false end
 end
 
 

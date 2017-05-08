@@ -78,14 +78,11 @@ end
 
 function Puzzle:update(dt)
     Puzzle.super.update(self, dt)
-    if self.moving then
-        local anyMoving = false
-        for dot in self.dots:iter() do
-            if dot:isMoving() then anyMoving = true end
-        end
-        if not anyMoving then self.moving = false end
+    local moving = false
+    for dot in self.dots:iter() do
+        if dot:isMoving() then moving = true end
     end
-    if self.shapes:get('mobile') == self.shapes:get('fixed') then
+    if not moving and self.shapes:get('mobile') == self.shapes:get('fixed') then
         self.finished = true
     end
 end
