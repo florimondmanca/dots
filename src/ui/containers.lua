@@ -12,7 +12,6 @@ function LinearLayout:initialize()
 end
 
 function LinearLayout:add(...)
-    print('Adding in linear layout', self)
     for _, object in ipairs({...}) do
         local last = self.objects[#self.objects]
         local dx, dy = 0, 0
