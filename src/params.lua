@@ -19,7 +19,7 @@ P.arrowLineWidth = 6 -- px
 P.arrowSize = 15 -- px
 
 P.dotRadius = 8 -- px
-P.dotMoveDuration = 1 -- seconds
+P.dotMoveDuration = .2 -- seconds
 
 P.rectangleLineWidth = 6  -- px
 P.rectangleColor = makeColor('#ff8822')
