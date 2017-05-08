@@ -4,7 +4,7 @@ local Dot = require('sprites.dot')
 local Arrow = require('sprites.arrow')
 local Rectangle = require('sprites.rectangle')
 local Pool = require('utils.pool')
-local GameState = require('utils.state')
+local GameState = require('states.state')
 local C = require('ui.containers')
 local B = require('ui.button')
 
@@ -49,14 +49,13 @@ function Puzzle:load()
     love.graphics.setBackgroundColor(P.backgroundColor)
     -- create buttons
     local x, y = 30, love.graphics.getHeight() - 60
-    local foo = B.TextButton('Menu', x, y)
-    foo:setOnClick(function() print('Foo! Foo! Foo! ...') end)
-    foo:setPadding(5)
+    local menu = B.TextButton('Menu', x, y)
+    menu:setOnClick(function() self.finished = true end)
+    menu:setPadding(5)
     local quit = B.TextButton('Quit', x, y)
     quit:setOnClick(function() love.event.quit() end)
     quit:setPadding(5)
-    self.buttons:add(foo)
-    self.buttons:add(quit)
+    self.buttons:add(menu, quit)
     for b in self.buttons:iter() do
         b:setBackgroundColor('none')
         b:addBorder(2)
@@ -86,6 +85,9 @@ function Puzzle:update(dt)
         end
         if not anyMoving then self.moving = false end
     end
+    if self.shapes:get('mobile') == self.shapes:get('fixed') then
+        self.finished = true
+    end
 end
 
 
@@ -102,17 +104,17 @@ function Puzzle:draw()
     )
 end
 
+function Puzzle:next()
+    local Menu = require('states.menu')
+    return Menu()
+end
+
 
 -- utility functions
 
 function Puzzle:findDot(i, j)
     return self.dots:find(function(dot) return dot.i == i and dot.j == j end)
 end
-
-function Puzzle:isFinished()
-    return self.shapes:get('mobile') == self.shapes:get('fixed')
-end
-
 
 -- to load a puzzle from a level file
 

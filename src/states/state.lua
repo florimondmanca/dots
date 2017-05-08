@@ -8,6 +8,7 @@ function GameState:initialize()
     self.objects = Pool()
     self.clickable = Pool()
     self.pools:add(self.objects, self.clickable)
+    self.finished = false
 end
 
 function GameState:update(dt)
@@ -27,7 +28,11 @@ function GameState:mousepressed(x, y, button)
 end
 
 function GameState:isFinished()
-    return false
+    return self.finished
+end
+
+function GameState:next()
+    error('No next state defined for ' .. self)
 end
 
 return GameState

@@ -1,28 +1,18 @@
-local Puzzle = require('puzzle')
-local Menu = require('menu')
+local Menu = require('states.menu')
 math.randomseed(os.time())
 
-local level
 local state
 
-
 function love.load()
-    level = 1
-    -- state = Puzzle.fromlevel(level)
     state = Menu()
     state:load()
-end
-
-local function nextLevel()
-    print('Finished!')
-    -- level = level + 1
-    -- puzzle = Puzzle.fromlevel(level)
 end
 
 function love.update(dt)
     state:update(dt)
     if state:isFinished() then
-        nextLevel()
+        state = state:next()
+        state:load()
     end
 end
 

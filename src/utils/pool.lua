@@ -9,6 +9,7 @@ end
 
 function Pool:add(...)
     for _, object in ipairs({...}) do
+        print('Going to insert', object)
         table.insert(self.objects, object)
     end
 end

@@ -12,9 +12,9 @@ function LinearLayout:initialize()
 end
 
 function LinearLayout:add(...)
-    local last = self.objects[#self.objects]
+    print('Adding in linear layout', self)
     for _, object in ipairs({...}) do
-        LinearLayout.super.add(self, object)
+        local last = self.objects[#self.objects]
         local dx, dy = 0, 0
         if last then  -- add padding
             dx, dy = self:getDisp(last)
@@ -23,6 +23,7 @@ function LinearLayout:add(...)
         end
         object.x = object.x + dx
         object.y = object.y + dy
+        LinearLayout.super.add(self, object)
     end
 end
 
