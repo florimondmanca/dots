@@ -29,11 +29,16 @@ function love.load()
     end
 end
 
+local function nextLevel()
+    level = level + 1
+    puzzle = Puzzle.fromlevel(level)
+end
+
 function love.update(dt)
     puzzle:update(dt)
     if puzzle:isFinished() then
-        level = level + 1
-        puzzle = Puzzle.fromlevel(level)
+        -- nextLevel()
+        print('Finished!')
     end
     buttons:update(dt)
 end
@@ -42,6 +47,7 @@ function love.draw()
     puzzle:draw()
     buttons:draw()
 end
+
 
 function love.keypressed(key, _, _)
     if key == 'escape' then love.event.quit() end
