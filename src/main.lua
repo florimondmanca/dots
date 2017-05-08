@@ -1,35 +1,14 @@
-local P = require('params')
 local Puzzle = require('puzzle')
-local B = require('ui.button')
-local C = require('ui.containers')
 math.randomseed(os.time())
 
 local level
-local puzzle
-
-local buttons = C.LinearLayout()
-buttons:setOrientation('horizontal')
-buttons:setPadding(10)
+local state
 
 
 function love.load()
-	love.graphics.setBackgroundColor(P.backgroundColor)
     level = 1
-    puzzle = Puzzle.fromlevel(level)
-    -- load buttons
-    local x, y = 30, love.graphics.getHeight() - 60
-    local foo = B.TextButton('Menu', x, y)
-    foo:setOnClick(function() print('Foo! Foo! Foo! ...') end)
-    foo:setPadding(5)
-    local quit = B.TextButton('Quit', x, y)
-    quit:setOnClick(function() love.event.quit() end)
-    quit:setPadding(5)
-    buttons:add(foo)
-    buttons:add(quit)
-    for b in buttons:iter() do
-        b:setBackgroundColor('none')
-        b:addBorder(2)
-    end
+    state = Puzzle.fromlevel(level)
+    state:load()
 end
 
 local function nextLevel()
@@ -39,16 +18,14 @@ local function nextLevel()
 end
 
 function love.update(dt)
-    puzzle:update(dt)
-    if puzzle:isFinished() then
+    state:update(dt)
+    if state:isFinished() then
         nextLevel()
     end
-    buttons:update(dt)
 end
 
 function love.draw()
-    puzzle:draw()
-    buttons:draw()
+    state:draw()
 end
 
 
@@ -57,15 +34,9 @@ function love.keypressed(key, _, _)
 end
 
 function love.mousemoved(x, y, dx, dy)
-    puzzle:mousemoved(x, y, dx, dy)
-    for button in buttons:iter() do
-        button:mousemoved(x, y)
-    end
+    state:mousemoved(x, y, dx, dy)
 end
 
 function love.mousepressed(x, y, button, _)
-    puzzle:mousepressed(x, y, button)
-    for b in buttons:iter() do
-        b:mousepressed(x, y, button)
-    end
+    state:mousepressed(x, y, button)
 end
