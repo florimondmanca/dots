@@ -139,7 +139,6 @@ end
 
 function TextButton:drawBorder()
     if self.borderWidth then
-        love.graphics.setLineJoin('bevel')
         love.graphics.setColor(self:getBorderColor())
         love.graphics.setLineWidth(self.borderWidth)
         love.graphics.rectangle('line', self.x, self.y, self:getWidth(), self:getHeight())

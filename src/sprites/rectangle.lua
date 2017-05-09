@@ -18,9 +18,11 @@ function Rectangle:draw()
     -- close rectangle
     table.insert(points, self.anchors[1].x)
     table.insert(points, self.anchors[1].y)
+    love.graphics.setLineJoin('bevel')
     love.graphics.setColor(self.color)
     love.graphics.setLineWidth(P.rectangleLineWidth)
     love.graphics.line(points)
+    love.graphics.setLineJoin('miter')
 end
 
 function Rectangle:__eq(other)

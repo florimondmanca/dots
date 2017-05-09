@@ -12,18 +12,18 @@ end
 P.backgroundColor = makeColor('#ffffff')
 
 P.puzzleLineColor = makeColor('#bbbfbf')
-P.puzzleLineWidth = 6  -- px
-P.puzzleA = 70 -- px
+local lineWidth = 8
+P.puzzleLineWidth = lineWidth  -- px
+P.puzzleA = 60 -- px
 
-P.arrowLineWidth = 6 -- px
-P.arrowSize = 15 -- px
+P.arrowLineWidth = lineWidth*.8 -- px
+P.arrowSize = P.puzzleA/4 -- px
 
-P.dotRadius = 8 -- px
-P.dotMoveDuration = .2 -- seconds
+P.dotRadius = lineWidth -- px
+P.dotMoveDuration = .1 -- seconds
 
-P.rectangleLineWidth = 6  -- px
+P.rectangleLineWidth = lineWidth  -- px
 P.rectangleColor = makeColor('#ff8822')
-P.rectangleDotRadius= 4 -- px
 
 P.font = love.graphics.newFont('res/fonts/hellovetica.ttf')
 P.fontColor = makeColor('#bbbfbf')
